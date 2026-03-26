@@ -1,0 +1,56 @@
+<div class="py-3">
+  <h4 class="mb-4">Users Management</h4>
+
+  @if(errorMsg) {
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  }
+  @if(successMsg) {
+    <div class="alert alert-success">{{ successMsg }}</div>
+  }
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Role</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(user of users; track user._id) {
+          <tr>
+            <td>{{ user.name }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }}</td>
+            <td>
+              <span class="badge"
+                [class.bg-danger]="user.role === 'admin'"
+                [class.bg-secondary]="user.role === 'user'">
+                {{ user.role }}
+              </span>
+            </td>
+            <td>
+              <span class="badge"
+                [class.bg-success]="user.is_active"
+                [class.bg-danger]="!user.is_active">
+                {{ user.is_active ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn btn-sm"
+                [class.btn-outline-danger]="user.is_active"
+                [class.btn-outline-success]="!user.is_active"
+                (click)="toggleStatus(user._id)">
+                {{ user.is_active ? 'Deactivate' : 'Activate' }}
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

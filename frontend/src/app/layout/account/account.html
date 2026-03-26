@@ -1,0 +1,106 @@
+<div class="container py-5">
+
+  @if(errorMsg) {
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  }
+  @if(successMsg) {
+    <div class="alert alert-success">{{ successMsg }}</div>
+  }
+
+  <div class="row">
+
+    <!-- Profile -->
+    <div class="col-md-4">
+      <div class="card mb-4">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="card-title mb-0">My Profile</h5>
+            <button class="btn btn-sm btn-outline-dark"
+              (click)="isEditing = !isEditing">
+              {{ isEditing ? 'Cancel' : 'Edit' }}
+            </button>
+          </div>
+          <hr>
+
+          @if(!isEditing) {
+            <p><strong>Name:</strong> {{ user?.name }}</p>
+            <p><strong>Email:</strong> {{ user?.email }}</p>
+            <p><strong>Phone:</strong> {{ user?.phone }}</p>
+            <p><strong>Address:</strong> {{ user?.address || 'Not set' }}</p>
+          } @else {
+            <form [formGroup]="profileForm" (ngSubmit)="onUpdateProfile()">
+              <div class="mb-3">
+                <label class="form-label">Name</label>
+                <input type="text" class="form-control" formControlName="name">
+                @if(profileForm.get('name')?.invalid && profileForm.get('name')?.touched) {
+                  <small class="text-danger">Min 3 characters</small>
+                }
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input type="text" class="form-control" formControlName="phone">
+                @if(profileForm.get('phone')?.invalid && profileForm.get('phone')?.touched) {
+                  <small class="text-danger">Valid Egyptian phone required</small>
+                }
+              </div>
+              <div class="mb-3">
+                <label class="form-label">Address</label>
+                <input type="text" class="form-control" formControlName="address">
+              </div>
+              <button type="submit" class="btn btn-dark w-100"
+                [disabled]="profileForm.invalid">
+                Save Changes
+              </button>
+            </form>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders -->
+    <div class="col-md-8">
+      <h5 class="mb-3">My Orders</h5>
+
+      @if(orders.length === 0) {
+        <p class="text-muted">No orders yet.</p>
+      }
+
+      @for(order of orders; track order._id) {
+        <div class="card mb-3">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center">
+              <h6 class="mb-0">{{ order.order_code }}</h6>
+              <span class="badge"
+                [class.bg-warning]="order.status === 'pending'"
+                [class.bg-primary]="order.status === 'prepared'"
+                [class.bg-info]="order.status === 'shipped'"
+                [class.bg-success]="order.status === 'delivered'"
+                [class.bg-danger]="order.status === 'cancelled_by_user' || order.status === 'cancelled_by_admin' || order.status === 'rejected'">
+                {{ order.status }}
+              </span>
+            </div>
+            <hr>
+            @for(item of order.items; track item.product) {
+              <div class="d-flex justify-content-between">
+                <span>{{ item.name }} x {{ item.quantity }}</span>
+                <span>{{ item.unit_price * item.quantity }} EGP</span>
+              </div>
+            }
+            <hr>
+            <div class="d-flex justify-content-between fw-bold">
+              <span>Total</span>
+              <span>{{ order.total_amount }} EGP</span>
+            </div>
+            @if(order.status === 'pending') {
+              <button class="btn btn-outline-danger btn-sm mt-2"
+                (click)="cancelOrder(order._id)">
+                Cancel Order
+              </button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+
+  </div>
+</div>

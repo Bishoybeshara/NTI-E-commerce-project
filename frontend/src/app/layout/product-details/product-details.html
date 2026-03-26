@@ -1,0 +1,52 @@
+<div class="container py-5">
+
+  @if(errorMsg) {
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  }
+
+  @if(product) {
+    <div class="row">
+      <div class="col-md-6">
+        <img [src]="staticURL + product.image_url" class="img-fluid rounded" [alt]="product.name">
+      </div>
+
+      <div class="col-md-6">
+        <h2>{{ product.name }}</h2>
+        <p class="text-muted">{{ product.category.name }} — {{ product.subcategory.name }}</p>
+
+        <p>{{ product.description }}</p>
+
+        <div class="mb-3">
+          @if(product.priceAfterDiscount) {
+            <span class="text-decoration-line-through text-muted me-2 fs-5">{{ product.price }} EGP</span>
+            <span class="text-danger fw-bold fs-4">{{ product.priceAfterDiscount }} EGP</span>
+          } @else {
+            <span class="fw-bold fs-4">{{ product.price }} EGP</span>
+          }
+        </div>
+
+        @if(product.stock_quantity === 0) {
+          <span class="badge bg-danger fs-6">Out of Stock</span>
+        } @else if(product.stock_quantity < 5) {
+          <span class="badge bg-warning text-dark fs-6">Only {{ product.stock_quantity }} left!</span>
+        } @else {
+          <span class="badge bg-success fs-6">In Stock</span>
+        }
+
+        @if(successMsg) {
+          <div class="alert alert-success mt-3">{{ successMsg }}</div>
+        }
+
+        <div class="mt-4">
+          <button class="btn btn-dark btn-lg w-100"
+            [disabled]="product.stock_quantity === 0"
+            (click)="addToCart()">
+            Add to Cart
+          </button>
+        </div>
+
+      </div>
+    </div>
+  }
+
+</div>

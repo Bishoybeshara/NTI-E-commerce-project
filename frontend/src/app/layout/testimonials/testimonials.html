@@ -1,0 +1,67 @@
+<div class="container py-5">
+  <h2 class="mb-4">Customer Reviews</h2>
+
+  @if(errorMsg) {
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  }
+  @if(successMsg) {
+    <div class="alert alert-success">{{ successMsg }}</div>
+  }
+
+  <!-- Write Review Form -->
+  <div class="card p-4 mb-5">
+    <h5 class="mb-3">Write a Review</h5>
+    <form [formGroup]="testimonialForm" (ngSubmit)="onSubmit()">
+
+      <div class="mb-3">
+        <label class="form-label">Rating</label>
+        <select class="form-select" formControlName="rating">
+          <option [value]="5">⭐⭐⭐⭐⭐ — Excellent</option>
+          <option [value]="4">⭐⭐⭐⭐ — Very Good</option>
+          <option [value]="3">⭐⭐⭐ — Good</option>
+          <option [value]="2">⭐⭐ — Fair</option>
+          <option [value]="1">⭐ — Poor</option>
+        </select>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Your Review</label>
+        <textarea class="form-control" formControlName="content"
+          rows="4" placeholder="Share your experience..."></textarea>
+        @if(testimonialForm.get('content')?.invalid && testimonialForm.get('content')?.touched) {
+          <small class="text-danger">Review must be at least 10 characters</small>
+        }
+      </div>
+
+      <button type="submit" class="btn btn-dark"
+        [disabled]="testimonialForm.invalid">
+        Submit Review
+      </button>
+
+    </form>
+  </div>
+
+  <!-- Approved Reviews -->
+  <h5 class="mb-3">What Our Customers Say</h5>
+
+  @if(testimonials.length === 0) {
+    <p class="text-muted">No reviews yet. Be the first to review!</p>
+  }
+
+  <div class="row">
+    @for(testimonial of testimonials; track testimonial._id) {
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 p-3">
+          <div class="mb-2">
+            @for(star of [1,2,3,4,5]; track star) {
+              <span>{{ star <= testimonial.rating ? '⭐' : '☆' }}</span>
+            }
+          </div>
+          <p class="card-text">{{ testimonial.content }}</p>
+          <small class="text-muted mt-auto">— {{ testimonial.user.name }}</small>
+        </div>
+      </div>
+    }
+  </div>
+
+</div>

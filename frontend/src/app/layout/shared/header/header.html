@@ -1,0 +1,53 @@
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+  <div class="container">
+
+    <a class="navbar-brand" routerLink="/home">Ⲡⲓϣⲱⲓ Store</a>
+
+    <div class="collapse navbar-collapse">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/home" routerLinkActive="active">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/products" routerLinkActive="active">Products</a>
+        </li>
+        <li class="nav-item">
+  <a class="nav-link position-relative" routerLink="/cart" routerLinkActive="active">
+    Cart
+    @if(cartCount$ | async; as count) {
+      @if(count > 0) {
+        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+          {{ count }}
+        </span>
+      }
+    }
+  </a>
+</li>
+<li class="nav-item">
+  <a class="nav-link" routerLink="/testimonials" routerLinkActive="active">Reviews</a>
+</li>
+      </ul>
+
+      <ul class="navbar-nav">
+        @if(userData) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/account" routerLinkActive="active">
+              {{ userData.name }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <button class="btn btn-outline-danger" (click)="logout()">Logout</button>
+          </li>
+        } @else {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login" routerLinkActive="active">Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/register" routerLinkActive="active">Register</a>
+          </li>
+        }
+      </ul>
+    </div>
+
+  </div>
+</nav>

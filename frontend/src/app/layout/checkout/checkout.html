@@ -1,0 +1,56 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="mb-4">Checkout</h2>
+
+      @if(errorMsg) {
+        <div class="alert alert-danger">{{ errorMsg }}</div>
+      }
+
+      @if(cart) {
+        <div class="card mb-4">
+          <div class="card-body">
+            <h5 class="card-title">Order Summary</h5>
+            <hr>
+            @for(item of cart.items; track item._id) {
+              <div class="d-flex justify-content-between mb-2">
+                <span>{{ item.product.name }} x {{ item.quantity }}</span>
+                <span>{{ item.unit_price * item.quantity }} EGP</span>
+              </div>
+            }
+            <hr>
+            <div class="d-flex justify-content-between fw-bold">
+              <span>Total</span>
+              <span>{{ cart.total_price }} EGP</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+
+        <div class="mb-3">
+          <label class="form-label">Phone</label>
+          <input type="text" class="form-control" formControlName="phone">
+          @if(checkoutForm.get('phone')?.invalid && checkoutForm.get('phone')?.touched) {
+            <small class="text-danger">Please enter a valid Egyptian phone number</small>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Delivery Address</label>
+          <textarea class="form-control" formControlName="address" rows="3"></textarea>
+          @if(checkoutForm.get('address')?.invalid && checkoutForm.get('address')?.touched) {
+            <small class="text-danger">Address is required</small>
+          }
+        </div>
+
+        <button type="submit" class="btn btn-dark w-100"
+          [disabled]="checkoutForm.invalid">
+          Place Order
+        </button>
+
+      </form>
+    </div>
+  </div>
+</div>

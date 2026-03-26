@@ -1,0 +1,12 @@
+<div class="container py-5">
+
+  @if(errorMsg) {
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  }
+
+  @if(page) {
+    <h2 class="mb-4">{{ page.title }}</h2>
+    <div>{{ page.content }}</div>
+  }
+
+</div>

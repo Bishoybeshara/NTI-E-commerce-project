@@ -1,0 +1,54 @@
+<div class="py-3">
+  <h4 class="mb-4">Orders Management</h4>
+
+  @if(errorMsg) {
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  }
+  @if(successMsg) {
+    <div class="alert alert-success">{{ successMsg }}</div>
+  }
+
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-dark">
+        <tr>
+          <th>Order Code</th>
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Total</th>
+          <th>Status</th>
+          <th>Update Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(order of orders; track order._id) {
+          <tr>
+            <td>{{ order.order_code }}</td>
+            <td>{{ order.phone }}</td>
+            <td>{{ order.address }}</td>
+            <td>{{ order.total_amount }} EGP</td>
+            <td>
+              <span class="badge"
+                [class.bg-warning]="order.status === 'pending'"
+                [class.bg-primary]="order.status === 'prepared'"
+                [class.bg-info]="order.status === 'shipped'"
+                [class.bg-success]="order.status === 'delivered'"
+                [class.bg-danger]="order.status === 'cancelled_by_admin' || order.status === 'rejected'">
+                {{ order.status }}
+              </span>
+            </td>
+            <td>
+              <select class="form-select form-select-sm"
+                [value]="order.status"
+                (change)="updateStatus(order._id, $any($event.target).value)">
+                @for(status of statuses; track status) {
+                  <option [value]="status">{{ status }}</option>
+                }
+              </select>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

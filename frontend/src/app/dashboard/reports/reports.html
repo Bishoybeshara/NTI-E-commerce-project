@@ -1,0 +1,128 @@
+<div class="py-3">
+  <h4 class="mb-4">Sales Report</h4>
+
+  @if(errorMsg) {
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  }
+
+  <div class="card p-3 mb-4">
+    <form [formGroup]="reportForm" (ngSubmit)="onSubmit()">
+      <div class="row align-items-end gap-3">
+        <div class="col-md-4">
+          <label class="form-label">Start Date</label>
+          <input type="date" class="form-control" formControlName="startDate">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">End Date</label>
+          <input type="date" class="form-control" formControlName="endDate">
+        </div>
+        <div class="col-md-3">
+          <button type="submit" class="btn btn-dark w-100"
+            [disabled]="reportForm.invalid">
+            Generate Report
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  @if(report) {
+
+    <!-- Overall Stats -->
+    @if(report.overallStats.length > 0) {
+      <div class="row mb-4">
+        <div class="col-md-4">
+          <div class="card text-center p-3">
+            <h6 class="text-muted">Total Orders</h6>
+            <h3 class="fw-bold">{{ report.overallStats[0].totalOrders }}</h3>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card text-center p-3">
+            <h6 class="text-muted">Total Revenue</h6>
+            <h3 class="fw-bold">{{ report.overallStats[0].totalRevenue }} EGP</h3>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Top Products -->
+    @if(report.topProducts.length > 0) {
+      <h5 class="mb-3">Top Selling Products</h5>
+      <div class="table-responsive mb-4">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Product</th>
+              <th>Qty Sold</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(product of report.topProducts; track product._id) {
+              <tr>
+                <td>{{ product.name }}</td>
+                <td>{{ product.totalQuantity }}</td>
+                <td>{{ product.totalRevenue }} EGP</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- Top Users -->
+    @if(report.topUsers.length > 0) {
+      <h5 class="mb-3">Top Customers</h5>
+      <div class="table-responsive mb-4">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Orders</th>
+              <th>Total Spent</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(user of report.topUsers; track user._id) {
+              <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.totalOrders }}</td>
+                <td>{{ user.totalSpent }} EGP</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+    <!-- Monthly Sales -->
+    @if(report.monthlySales.length > 0) {
+      <h5 class="mb-3">Monthly Sales</h5>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Month</th>
+              <th>Orders</th>
+              <th>Revenue</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for(month of report.monthlySales; track month._id.month) {
+              <tr>
+                <td>{{ month._id.month }}/{{ month._id.year }}</td>
+                <td>{{ month.totalOrders }}</td>
+                <td>{{ month.totalRevenue }} EGP</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    }
+
+  }
+
+</div>

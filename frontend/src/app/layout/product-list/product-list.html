@@ -1,0 +1,71 @@
+<div class="container py-5">
+  <h2 class="mb-4">Our Products</h2>
+
+  @if(errorMsg) {
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  }
+
+  <!-- Filters -->
+  <div class="row mb-4 g-3">
+    <div class="col-md-3">
+      <input type="text" class="form-control" placeholder="Search products..."
+        [(ngModel)]="searchText" (input)="onSearch()">
+    </div>
+
+    <div class="col-md-3">
+      <select class="form-select" [(ngModel)]="selectedCategory" (change)="onCategoryChange()">
+        <option value="">All Categories</option>
+        @for(cat of categories; track cat._id) {
+          <option [value]="cat._id">{{ cat.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <select class="form-select" [(ngModel)]="selectedSubcategory"
+        (change)="onSubcategoryChange()" [disabled]="!selectedCategory">
+        <option value="">All Subcategories</option>
+        @for(sub of subcategories; track sub._id) {
+          <option [value]="sub._id">{{ sub.name }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <button class="btn btn-outline-dark w-100" (click)="resetFilters()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Products -->
+  <div class="row">
+    @for(product of products; track product._id) {
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <img [src]="staticURL + product.image_url" class="card-img-top" [alt]="product.name">
+          <div class="card-body">
+            <h5 class="card-title">{{ product.name }}</h5>
+            <p class="card-text">
+              @if(product.priceAfterDiscount) {
+                <span class="text-decoration-line-through text-muted me-2">{{ product.price }} EGP</span>
+                <span class="text-danger fw-bold">{{ product.priceAfterDiscount }} EGP</span>
+              } @else {
+                <span class="fw-bold">{{ product.price }} EGP</span>
+              }
+            </p>
+            @if(product.stock_quantity === 0) {
+              <span class="badge bg-danger">Out of Stock</span>
+            } @else if(product.stock_quantity < 5) {
+              <span class="badge bg-warning text-dark">Only {{ product.stock_quantity }} left!</span>
+            }
+          </div>
+          <div class="card-footer">
+            <a [routerLink]="'/product/' + product.slug" class="btn btn-dark w-100">View Details</a>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <p class="text-muted">No products found.</p>
+    }
+  </div>
+
+</div>

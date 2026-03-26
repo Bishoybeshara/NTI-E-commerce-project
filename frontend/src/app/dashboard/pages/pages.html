@@ -1,0 +1,49 @@
+<div class="py-3">
+  <h4 class="mb-4">Pages Management</h4>
+
+  @if(errorMsg) {
+    <div class="alert alert-danger">{{ errorMsg }}</div>
+  }
+  @if(successMsg) {
+    <div class="alert alert-success">{{ successMsg }}</div>
+  }
+
+  <!-- Page Selector -->
+  <div class="btn-group mb-4">
+    <button class="btn"
+      [class.btn-dark]="currentSlug === 'about'"
+      [class.btn-outline-dark]="currentSlug !== 'about'"
+      (click)="loadPage('about')">About Us</button>
+    <button class="btn"
+      [class.btn-dark]="currentSlug === 'contact'"
+      [class.btn-outline-dark]="currentSlug !== 'contact'"
+      (click)="loadPage('contact')">Contact Us</button>
+    <button class="btn"
+      [class.btn-dark]="currentSlug === 'faq'"
+      [class.btn-outline-dark]="currentSlug !== 'faq'"
+      (click)="loadPage('faq')">FAQ</button>
+  </div>
+
+  <!-- Form -->
+  <div class="card p-4">
+    <form [formGroup]="pageForm" (ngSubmit)="onSubmit()">
+
+      <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" class="form-control" formControlName="title">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Content</label>
+        <textarea class="form-control" formControlName="content" rows="8"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-dark"
+        [disabled]="pageForm.invalid">
+        Save Changes
+      </button>
+
+    </form>
+  </div>
+
+</div>
