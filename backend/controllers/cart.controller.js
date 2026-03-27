@@ -34,7 +34,12 @@ exports.getCart = catchAsync(async (req, res, next)=>{
 
   res.status(200).json({
     status:'success',
-    data: cart
+    priceChanged,
+    data: {
+    items: items, 
+    total_price: items.reduce((acc, item) => acc + (item.currentPrice * item.quantity), 0)
+  }
+    // data: cart
   });
 });
 
