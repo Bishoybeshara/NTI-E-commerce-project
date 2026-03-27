@@ -12,6 +12,6 @@ router.get('/:slug',productController.getProductBySlug);
 // Admin routes 
 router.post('/' , authenticate , authorize('admin') , upload.single('image') , productController.addProduct);
 router.put('/:id' , authenticate , authorize('admin') , upload.single('image') ,productController.updateProduct );
-router.delete('/:id' . authenticate , authorize('admin') , productController.deleteProduct);
+router.delete('/:id' , authenticate , authorize('admin') , productController.deleteProduct);
 
 module.exports = router;

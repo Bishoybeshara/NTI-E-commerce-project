@@ -1,9 +1,12 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../environment/environment";
-import { ICategoriesRes, ISubcategoriesRes } from "../models/category.model";
+import { ICategoriesRes, ICategory, ISubcategoriesRes } from "../models/category.model";
+
 
 @Injectable({providedIn:'root'})
+
+
 export class CategoryService {
   private readonly apiURL = environment.apiURL + 'category';
 
@@ -16,4 +19,12 @@ export class CategoryService {
   getSubCategories(categoryId :string){
     return this._http.get<ISubcategoriesRes>(`${this.apiURL}/${categoryId}/subcategories`)
   }
+
+  addCategory(categoryData: { name: string; slug: string }) {
+    return this._http.post<ICategoriesRes>(this.apiURL, categoryData);
+  }
+
+  addSubcategory(categoryId: string, subcategoryData: { name: string; slug: string; category: string }) {
+  return this._http.post<ISubcategoriesRes>(`${this.apiURL}/${categoryId}/subcategories`, subcategoryData);
+}
 }

@@ -1,0 +1,85 @@
+<div class="py-3 px-2">
+  <h4 class="mb-4 fw-bold text-dark">Categories Management</h4>
+
+  @if(errorMsg) { <div class="alert alert-danger shadow-sm">{{ errorMsg }}</div> }
+  @if(successMsg) { <div class="alert alert-success shadow-sm">{{ successMsg }}</div> }
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="border rounded p-4 bg-white shadow-sm">
+        <h6 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-plus-circle me-1"></i> Add Category</h6>
+        <form [formGroup]="categoryForm" (ngSubmit)="onCreateCategory()">
+          <div class="mb-3">
+            <input type="text" formControlName="name" class="form-control mb-2"
+                  placeholder="Category Name" (input)="generateSlug()">
+
+            <input type="text" formControlName="slug" class="form-control"
+                  placeholder="category-slug-format">
+          </div>
+          <button type="submit" class="btn btn-primary w-100" [disabled]="categoryForm.invalid">
+            Save Category
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="border rounded p-4 bg-white shadow-sm">
+        <h6 class="fw-bold mb-3 text-dark"><i class="fa-solid fa-sitemap me-1"></i> Add Subcategory</h6>
+        <form [formGroup]="subcategoryForm" (ngSubmit)="onCreateSubcategory()">
+          <div class="mb-3">
+            <select formControlName="categoryId" class="form-select mb-2">
+              <option value="" disabled selected>Select Parent Category</option>
+              @for(cat of categories; track cat._id) {
+                <option [value]="cat._id">{{ cat.name }}</option>
+              }
+            </select>
+
+            <input type="text" formControlName="name" class="form-control mb-2"
+                   placeholder="Subcategory Name" (input)="generateSubSlug()">
+
+            <input type="text" formControlName="slug" class="form-control"
+                  placeholder="subcategory-slug-format">
+          </div>
+          <button type="submit" class="btn btn-dark w-100" [disabled]="subcategoryForm.invalid">
+            Link Subcategory
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="table-responsive shadow-sm border rounded">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-dark">
+        <tr>
+          <th class="ps-3">Name</th>
+          <th>Slug</th>
+          <th>Status</th>
+          <th class="text-center">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for(cat of categories; track cat._id) {
+          <tr>
+            <td class="ps-3 fw-bold text-primary">{{ cat.name }}</td>
+            <td class="text-muted small">{{ cat.slug }}</td>
+            <td>
+              <span class="badge rounded-pill px-3 py-2 w-75"
+                [class.bg-success]="!cat.is_deleted"
+                [class.bg-danger]="cat.is_deleted">
+                {{ cat.is_deleted ? 'Deleted' : 'Active' }}
+              </span>
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-info me-1">Active<i class="fa-solid fa-pen"></i></button>
+              <!-- <button class="btn btn-sm btn-outline-danger">Deleted<i class="fa-solid fa-trash"></i></button> -->
+            </td>
+          </tr>
+        } @empty {
+          <tr><td colspan="4" class="text-center py-4 text-muted">No categories found.</td></tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

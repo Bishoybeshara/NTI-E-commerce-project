@@ -31,6 +31,8 @@ export const routes: Routes = [
       {path:'reports' , loadComponent:()=>import('./dashboard/reports/reports').then(b=>b.Reports)},
       {path:'testimonials' , loadComponent: ()=> import('./dashboard/testimonials/testimonials').then(b =>b.Testimonials)},
       {path: 'pages', loadComponent: () => import('./dashboard/pages/pages').then(b => b.Pages) },
+      { path: 'categories', loadComponent: () => import('./dashboard/categories/categories').then(m => m.Categories)
+}
     ]
   },
   {path:'login' , loadComponent:()=> import('./login/login').then( b => b.Login)},

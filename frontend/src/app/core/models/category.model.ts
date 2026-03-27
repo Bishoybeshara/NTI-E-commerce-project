@@ -1,11 +1,15 @@
 export interface ICategory {
-  _id:string;
-  name:string;
-  is_deleted:boolean;
+  _id: string;
+  name: string;
+  slug: string;
+  is_deleted: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface ICategoriesRes {
   status: string;
+  results?: number;
   data:ICategory[];
 }
 
